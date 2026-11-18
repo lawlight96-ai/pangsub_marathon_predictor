@@ -120,7 +120,7 @@
     /* Main 2-Column Layout */
     .dashboard-grid {
       display: grid;
-      grid-template-columns: 410px 1fr;
+      grid-template-columns: 430px 1fr;
       gap: 24px;
       align-items: start;
     }
@@ -138,6 +138,32 @@
       border-radius: var(--radius-lg);
       padding: 22px;
       box-shadow: var(--shadow);
+    }
+
+    /* Top Step Guide Notice (Item 5) */
+    .step-guide-banner {
+      background: linear-gradient(135deg, rgba(249, 115, 22, 0.14) 0%, rgba(56, 189, 248, 0.1) 100%);
+      border: 1px solid rgba(249, 115, 22, 0.4);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      margin-bottom: 20px;
+      font-size: 0.82rem;
+      color: #f1f5f9;
+      line-height: 1.45;
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+    }
+
+    .step-guide-banner .guide-icon {
+      font-size: 1rem;
+      line-height: 1.2;
+      flex-shrink: 0;
+    }
+
+    .step-guide-banner strong {
+      color: var(--brand-light);
+      font-weight: 800;
     }
 
     .section-step {
@@ -167,7 +193,7 @@
     }
 
     .step-sub {
-      font-size: 0.76rem;
+      font-size: 0.75rem;
       color: var(--text-sub);
     }
 
@@ -238,7 +264,7 @@
       color: var(--brand-light);
     }
 
-    /* Record Inputs */
+    /* Record Inputs (Items 1 & 2) */
     .record-list {
       display: flex;
       flex-direction: column;
@@ -247,80 +273,146 @@
 
     .record-row {
       display: grid;
-      grid-template-columns: 78px 1fr auto;
+      grid-template-columns: 76px 1fr auto;
       align-items: center;
       gap: 10px;
       background: var(--bg-input);
       border: 1px solid var(--border);
       padding: 10px 12px;
       border-radius: var(--radius-md);
-      transition: border-color 0.15s ease;
+      transition: border-color 0.15s ease, background-color 0.15s ease;
     }
 
     .record-row:focus-within {
       border-color: var(--brand);
     }
 
+    /* Item 2: Do NOT dim the entire row so the '기록없음' button stays bright and visible */
     .record-row.disabled {
-      opacity: 0.48;
-      background: rgba(14, 21, 37, 0.5);
+      background: rgba(14, 21, 37, 0.45);
+      border-color: rgba(38, 51, 77, 0.6);
+    }
+
+    .record-row.disabled .record-label,
+    .record-row.disabled .input-wrap {
+      opacity: 0.32;
+      pointer-events: none;
     }
 
     .record-label {
       font-size: 0.88rem;
       font-weight: 700;
       color: var(--text-main);
+      transition: opacity 0.15s ease;
     }
 
     .record-label small {
       display: block;
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      font-weight: 500;
+      font-size: 0.69rem;
+      color: var(--text-sub);
+      font-weight: 600;
+      margin-top: 1px;
     }
 
     .input-wrap {
       display: flex;
+      flex-direction: column;
+      gap: 4px;
+      transition: opacity 0.15s ease;
+    }
+
+    .input-box-inner {
+      display: flex;
       align-items: center;
-      gap: 8px;
+      justify-content: space-between;
+      gap: 6px;
+      background: #080d18;
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      padding: 6px 10px;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .record-row:focus-within .input-box-inner {
+      border-color: var(--brand);
+      box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2);
     }
 
     .time-input {
       width: 100%;
+      min-width: 70px;
       background: transparent;
       border: none;
-      color: var(--text-main);
-      font-size: 1.02rem;
-      font-weight: 700;
+      color: #ffffff;
+      font-size: 1.05rem;
+      font-weight: 800;
+      letter-spacing: 0.03em;
       font-variant-numeric: tabular-nums;
       outline: none;
     }
 
     .time-input::placeholder {
-      color: #3b4b6b;
-      font-weight: 500;
+      color: #475569;
+      font-weight: 600;
     }
 
-    .live-pace {
-      font-size: 0.74rem;
+    .format-hint-Row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      padding: 0 2px;
+    }
+
+    .korean-time-readout {
+      font-size: 0.71rem;
+      color: var(--text-sub);
       font-weight: 600;
-      color: var(--accent-blue);
-      background: rgba(56, 189, 248, 0.1);
-      padding: 3px 7px;
-      border-radius: 6px;
-      white-space: nowrap;
       font-variant-numeric: tabular-nums;
     }
 
+    .live-pace {
+      font-size: 0.73rem;
+      font-weight: 700;
+      color: var(--accent-blue);
+      background: rgba(56, 189, 248, 0.12);
+      padding: 2px 7px;
+      border-radius: 6px;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+      flex-shrink: 0;
+    }
+
+    /* Item 2: Bright, high-contrast toggle button for '기록없음' */
     .none-check-label {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
       font-size: 0.76rem;
-      color: var(--text-sub);
+      font-weight: 700;
+      color: #e2e8f0;
+      background: var(--bg-card-alt);
+      border: 1px solid var(--border-light);
+      padding: 7px 10px;
+      border-radius: 8px;
       cursor: pointer;
       user-select: none;
       white-space: nowrap;
+      opacity: 1 !important;
+      transition: all 0.15s ease;
+    }
+
+    .none-check-label:hover {
+      border-color: var(--brand-light);
+      color: #ffffff;
+      background: rgba(249, 115, 22, 0.15);
+    }
+
+    .record-row.disabled .none-check-label {
+      background: rgba(249, 115, 22, 0.2);
+      border-color: var(--brand);
+      color: #ffffff;
+      box-shadow: 0 0 12px rgba(249, 115, 22, 0.25);
     }
 
     .none-check-label input {
@@ -796,7 +888,7 @@
       font-size: 0.82rem;
     }
 
-    /* 5. 5km Split Table */
+    /* 5. Pace Chart (Item 3) */
     .splits-grid {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
@@ -814,7 +906,7 @@
       background: var(--bg-input);
       border: 1px solid var(--border);
       border-radius: var(--radius-sm);
-      padding: 10px;
+      padding: 11px 10px;
       text-align: center;
     }
 
@@ -824,25 +916,96 @@
     }
 
     .split-km {
-      font-size: 0.74rem;
+      font-size: 0.75rem;
       font-weight: 700;
       color: var(--text-sub);
     }
 
     .split-time {
-      font-size: 1rem;
+      font-size: 1.04rem;
       font-weight: 800;
+      color: #ffffff;
+      margin-top: 3px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* 6. Dedicated 40-Min Fueling Timing Box (Item 4) */
+    .fueling-section {
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    .fueling-banner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: linear-gradient(135deg, rgba(249, 115, 22, 0.14) 0%, rgba(16, 185, 129, 0.1) 100%);
+      border: 1px solid rgba(249, 115, 22, 0.4);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      margin-bottom: 12px;
+    }
+
+    .fueling-main-text {
+      font-size: 0.96rem;
+      font-weight: 800;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .fueling-highlight {
+      color: var(--brand-light);
+      font-size: 1.15rem;
+      font-weight: 900;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+
+    .fueling-sub-text {
+      font-size: 0.78rem;
+      color: var(--text-sub);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .fueling-chips-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+      gap: 8px;
+    }
+
+    .fuel-chip {
+      background: var(--bg-input);
+      border: 1px solid var(--border-light);
+      border-left: 3px solid var(--brand);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+    }
+
+    .fuel-chip-step {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--brand-light);
+    }
+
+    .fuel-chip-km {
+      font-size: 1.05rem;
+      font-weight: 900;
       color: #ffffff;
       margin-top: 2px;
       font-variant-numeric: tabular-nums;
     }
 
-    .split-gel {
-      display: inline-block;
-      margin-top: 3px;
-      font-size: 0.66rem;
-      font-weight: 700;
-      color: var(--brand-light);
+    .fuel-chip-detail {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+      font-variant-numeric: tabular-nums;
     }
 
     .error-banner {
@@ -875,12 +1038,20 @@
     </header>
 
     <div id="errorBanner" class="error-banner">
-      최소 1개 이상의 종목 기록을 올바른 형식(예: 19:00 또는 1:27:24)으로 입력해 주세요.
+      최소 1개 이상의 종목 기록을 올바른 형식(예: 숫자 1812 입력 시 18:12 자동 변환)으로 입력해 주세요.
     </div>
 
     <div class="dashboard-grid">
       <!-- Left Column: Input Controls -->
       <aside class="card">
+        <!-- Item 5: Top Step Instruction Banner -->
+        <div class="step-guide-banner">
+          <span class="guide-icon">💡</span>
+          <div>
+            아래 <strong>STEP 1 ~ 3을 순서대로 진행</strong>해주시고 하단의 <strong>[예상 기록 산출하기]</strong>를 클릭하시면 맞춤형 풀코스 예상기록을 확인하실 수 있습니다.
+          </div>
+        </div>
+
         <!-- STEP 1: Monthly Mileage -->
         <div class="section-step">
           <div class="step-title">
@@ -914,13 +1085,13 @@
 
         <div class="divider"></div>
 
-        <!-- STEP 2: Race Records -->
+        <!-- STEP 2: Race Records (Items 1 & 2) -->
         <div class="section-step">
           <div class="step-title">
             <span class="step-badge">STEP 2</span>
             종목별 보유 기록
           </div>
-          <span class="step-sub">분:초 또는 시:분:초</span>
+          <span class="step-sub">숫자만 치면 : 자동 생성</span>
         </div>
 
         <div class="record-list">
@@ -928,11 +1099,16 @@
           <div class="record-row" id="row-5k">
             <div class="record-label">
               5km 기록
-              <small>5,000m</small>
+              <small>분:초 (MM:SS)</small>
             </div>
             <div class="input-wrap">
-              <input type="text" id="input-5k" class="time-input" placeholder="18:12" value="18:12" oninput="onRecordInput('5k')" />
-              <span class="live-pace" id="pace-5k">3'38"/km</span>
+              <div class="input-box-inner">
+                <input type="text" id="input-5k" class="time-input" inputmode="numeric" maxlength="8" placeholder="예: 18:12" value="18:12" oninput="onRecordInput('5k', event)" />
+                <span class="live-pace" id="pace-5k">3'38"/km</span>
+              </div>
+              <div class="format-hint-Row">
+                <span class="korean-time-readout" id="kr-5k">18분 12초</span>
+              </div>
             </div>
             <label class="none-check-label">
               <input type="checkbox" id="none-5k" onchange="toggleNone('5k')" />
@@ -944,11 +1120,16 @@
           <div class="record-row" id="row-10k">
             <div class="record-label">
               10km 기록
-              <small>10,000m</small>
+              <small>분:초 (MM:SS)</small>
             </div>
             <div class="input-wrap">
-              <input type="text" id="input-10k" class="time-input" placeholder="38:00" value="38:00" oninput="onRecordInput('10k')" />
-              <span class="live-pace" id="pace-10k">3'48"/km</span>
+              <div class="input-box-inner">
+                <input type="text" id="input-10k" class="time-input" inputmode="numeric" maxlength="8" placeholder="예: 38:00" value="38:00" oninput="onRecordInput('10k', event)" />
+                <span class="live-pace" id="pace-10k">3'48"/km</span>
+              </div>
+              <div class="format-hint-Row">
+                <span class="korean-time-readout" id="kr-10k">38분 00초</span>
+              </div>
             </div>
             <label class="none-check-label">
               <input type="checkbox" id="none-10k" onchange="toggleNone('10k')" />
@@ -960,11 +1141,16 @@
           <div class="record-row" id="row-half">
             <div class="record-label">
               하프 기록
-              <small>21.0975km</small>
+              <small>시:분:초 (H:MM:SS)</small>
             </div>
             <div class="input-wrap">
-              <input type="text" id="input-half" class="time-input" placeholder="1:24:00" value="1:24:00" oninput="onRecordInput('half')" />
-              <span class="live-pace" id="pace-half">3'59"/km</span>
+              <div class="input-box-inner">
+                <input type="text" id="input-half" class="time-input" inputmode="numeric" maxlength="8" placeholder="예: 1:24:00" value="1:24:00" oninput="onRecordInput('half', event)" />
+                <span class="live-pace" id="pace-half">3'59"/km</span>
+              </div>
+              <div class="format-hint-Row">
+                <span class="korean-time-readout" id="kr-half">1시간 24분 00초</span>
+              </div>
             </div>
             <label class="none-check-label">
               <input type="checkbox" id="none-half" onchange="toggleNone('half')" />
@@ -976,11 +1162,16 @@
           <div class="record-row disabled" id="row-full">
             <div class="record-label">
               풀코스 기록
-              <small>42.195km</small>
+              <small>시:분:초 (H:MM:SS)</small>
             </div>
             <div class="input-wrap">
-              <input type="text" id="input-full" class="time-input" placeholder="2:59:10" value="" disabled oninput="onRecordInput('full')" />
-              <span class="live-pace" id="pace-full">-</span>
+              <div class="input-box-inner">
+                <input type="text" id="input-full" class="time-input" inputmode="numeric" maxlength="8" placeholder="예: 2:59:10" value="" disabled oninput="onRecordInput('full', event)" />
+                <span class="live-pace" id="pace-full">-</span>
+              </div>
+              <div class="format-hint-Row">
+                <span class="korean-time-readout" id="kr-full">기록 없음 (체크 해제 시 입력)</span>
+              </div>
             </div>
             <label class="none-check-label">
               <input type="checkbox" id="none-full" checked onchange="toggleNone('full')" />
@@ -1185,13 +1376,31 @@
           </section>
         </div>
 
-        <!-- 5. Full Course 5km Split Guide -->
+        <!-- 5. Pace Chart & Separate 40-Min Fueling Guide (Items 3 & 4) -->
         <section class="card">
           <div class="section-step">
-            <div class="step-title">풀코스 5km 구간별 통과 시간표 & 보급 타이밍 (추천 목표 기준)</div>
-            <span class="step-sub">글리코겐 고갈 방지를 위해 15km 이전부터 선제적 에너지젤 섭취 권장</span>
+            <div class="step-title">📊 페이스차트 (추천 목표 기준)</div>
+            <span class="step-sub">5km 구간별 누적 통과 시간</span>
           </div>
           <div class="splits-grid" id="splitsGrid"></div>
+
+          <!-- Item 4: Separate Fueling Timing Guide based on ~40 min running -->
+          <div class="fueling-section">
+            <div class="section-step" style="margin-bottom: 10px;">
+              <div class="step-title">⚡ 에너지젤 보급 타이밍 가이드 (주행 약 40분 주기 기준)</div>
+              <span class="step-sub">글리코겐 고갈 방지를 위한 선제적 탄수화물 보충</span>
+            </div>
+            <div class="fueling-banner">
+              <div class="fueling-main-text">
+                <span>권장 보급 주기:</span>
+                <span class="fueling-highlight" id="fuelIntervalText">약 9km 지점마다 에너지젤 섭취</span>
+              </div>
+              <div class="fueling-sub-text" id="fuelCalcDetail">
+                (추천 페이스 기준 40분에 9.4km 지점 통과 → 9km 지점마다 보급 표기)
+              </div>
+            </div>
+            <div class="fueling-chips-grid" id="fuelingChipsGrid"></div>
+          </div>
         </section>
       </main>
     </div>
@@ -1217,11 +1426,56 @@
       { name: '풀마라톤', km: 42.195, highlight: true }
     ];
 
+    // Item 1: Auto-format digits into MM:SS or H:MM:SS with ':' automatically appearing
+    function autoFormatTimeInput(key, rawValue, isBackspace) {
+      const trimmed = rawValue.trim();
+      if (!trimmed) return '';
+
+      // If user is deleting and ends on a colon, strip the trailing colon cleanly
+      if (isBackspace && trimmed.endsWith(':')) {
+        return trimmed.slice(0, -1);
+      }
+
+      const digits = trimmed.replace(/\D/g, '').slice(0, 6);
+      if (!digits) return '';
+
+      if (key === '5k' || key === '10k') {
+        // Default MM:SS (up to 4 digits), or H:MM:SS if 5~6 digits (e.g. 10km over 1 hour: 10020 -> 1:00:20)
+        if (digits.length <= 2) {
+          return digits;
+        } else if (digits.length <= 4) {
+          return `${digits.slice(0, 2)}:${digits.slice(2)}`;
+        } else if (digits.length === 5) {
+          return `${digits.slice(0, 1)}:${digits.slice(1, 3)}:${digits.slice(3, 5)}`;
+        } else {
+          return `${digits.slice(0, 2)}:${digits.slice(2, 4)}:${digits.slice(4, 6)}`;
+        }
+      } else {
+        // Half & Full: H:MM:SS (e.g. 12400 -> 1:24:00, 25910 -> 2:59:10)
+        // Exception: if Half starts with 5~9 and is <=4 digits (e.g. 5930 -> 59:30)
+        const firstDigit = Number(digits[0]);
+        if (key === 'half' && firstDigit >= 5 && digits.length <= 4) {
+          if (digits.length <= 2) return digits;
+          return `${digits.slice(0, 2)}:${digits.slice(2)}`;
+        }
+
+        if (digits.length === 1) {
+          return digits;
+        } else if (digits.length <= 3) {
+          return `${digits.slice(0, 1)}:${digits.slice(1)}`;
+        } else if (digits.length <= 5) {
+          return `${digits.slice(0, 1)}:${digits.slice(1, 3)}:${digits.slice(3)}`;
+        } else {
+          return `${digits.slice(0, 2)}:${digits.slice(2, 4)}:${digits.slice(4, 6)}`;
+        }
+      }
+    }
+
     function parseTimeStr(str) {
       if (!str) return null;
       const cleaned = str.trim().replace(/\s+/g, ':');
-      const parts = cleaned.split(':').map(Number);
-      if (parts.some(isNaN)) return null;
+      const parts = cleaned.split(':').filter(p => p !== '').map(Number);
+      if (parts.length === 0 || parts.some(isNaN)) return null;
       if (parts.length === 2) {
         const [m, s] = parts;
         if (m < 0 || s < 0 || s >= 60) return null;
@@ -1243,6 +1497,17 @@
         return `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
       }
       return `${m}:${String(s).padStart(2, '0')}`;
+    }
+
+    function formatKoreanFullTime(sec) {
+      const total = Math.max(0, Math.round(sec));
+      const h = Math.floor(total / 3600);
+      const m = Math.floor((total % 3600) / 60);
+      const s = total % 60;
+      if (h > 0) {
+        return `${h}시간 ${String(m).padStart(2, '0')}분 ${String(s).padStart(2, '0')}초`;
+      }
+      return `${m}분 ${String(s).padStart(2, '0')}초`;
     }
 
     function formatPace(secPerKm) {
@@ -1308,28 +1573,41 @@
       const input = document.getElementById(`input-${key}`);
       const row = document.getElementById(`row-${key}`);
       const paceEl = document.getElementById(`pace-${key}`);
+      const krEl = document.getElementById(`kr-${key}`);
 
       if (checkbox.checked) {
         input.value = '';
         input.disabled = true;
         row.classList.add('disabled');
         paceEl.textContent = '-';
+        krEl.textContent = '기록 없음 (체크 해제 시 입력)';
       } else {
         input.disabled = false;
         row.classList.remove('disabled');
+        krEl.textContent = '숫자만 입력해도 : 자동 생성';
         input.focus();
       }
       calculateAll();
     }
 
-    function onRecordInput(key) {
+    function onRecordInput(key, event) {
       const input = document.getElementById(`input-${key}`);
       const paceEl = document.getElementById(`pace-${key}`);
+      const krEl = document.getElementById(`kr-${key}`);
+
+      const isBackspace = event && event.inputType === 'deleteContentBackward';
+      const formatted = autoFormatTimeInput(key, input.value, isBackspace);
+      if (input.value !== formatted) {
+        input.value = formatted;
+      }
+
       const sec = parseTimeStr(input.value);
       if (sec && sec > 0) {
         paceEl.textContent = formatPace(sec / DISTANCES[key]);
+        krEl.textContent = formatKoreanFullTime(sec);
       } else {
         paceEl.textContent = '-';
+        krEl.textContent = input.value ? '형식 확인 (예: 18:12)' : '숫자만 입력해도 : 자동 생성';
       }
       calculateAll();
     }
@@ -1377,6 +1655,7 @@
         const check = document.getElementById(`none-${k}`);
         const row = document.getElementById(`row-${k}`);
         const paceEl = document.getElementById(`pace-${k}`);
+        const krEl = document.getElementById(`kr-${k}`);
 
         if (val) {
           check.checked = false;
@@ -1385,12 +1664,14 @@
           row.classList.remove('disabled');
           const sec = parseTimeStr(val);
           paceEl.textContent = sec ? formatPace(sec / DISTANCES[k]) : '-';
+          krEl.textContent = sec ? formatKoreanFullTime(sec) : '';
         } else {
           check.checked = true;
           input.disabled = true;
           input.value = '';
           row.classList.add('disabled');
           paceEl.textContent = '-';
+          krEl.textContent = '기록 없음 (체크 해제 시 입력)';
         }
       });
 
@@ -1535,11 +1816,12 @@
       const recommendedFullSec = midFullSec * (1 + totalPenalty);
       const pbFullSec = recommendedFullSec * 0.9885;
       const safeFullSec = recommendedFullSec * 1.0235;
+      const targetPaceSecPerKm = recommendedFullSec / 42.195;
 
       document.getElementById('heroTargetTime').textContent = formatTime(recommendedFullSec);
-      document.getElementById('heroTargetPace').textContent = formatPace(recommendedFullSec / 42.195);
+      document.getElementById('heroTargetPace').textContent = formatPace(targetPaceSecPerKm);
       document.getElementById('heroHalfSplit').textContent = `하프 통과: ${formatTime(recommendedFullSec * 0.5)}`;
-      document.getElementById('hero5kSplit').textContent = formatKoreanMinSec((recommendedFullSec / 42.195) * 5);
+      document.getElementById('hero5kSplit').textContent = formatKoreanMinSec(targetPaceSecPerKm * 5);
 
       document.getElementById('pbTargetTime').textContent = formatTime(pbFullSec);
       document.getElementById('pbTargetPace').textContent = `페이스: ${formatPace(pbFullSec / 42.195)}`;
@@ -1549,33 +1831,62 @@
       document.getElementById('safeTargetPace').textContent = `페이스: ${formatPace(safeFullSec / 42.195)}`;
       document.getElementById('safeTargetSplit').textContent = `5km당: ${formatKoreanMinSec((safeFullSec / 42.195) * 5)}`;
 
-      // 5. 5km Splits Chart
+      // 5. Item 3: Pace Chart (Clean 5km splits without fueling tags)
       const splitsGrid = document.getElementById('splitsGrid');
       splitsGrid.innerHTML = '';
       const splitPoints = [
-        { label: '5km', km: 5, gel: '' },
-        { label: '10km', km: 10, gel: '⚡ 에너지젤 #1' },
-        { label: '15km', km: 15, gel: '' },
-        { label: '20km', km: 20, gel: '⚡ 에너지젤 #2' },
-        { label: 'Half', km: 21.0975, gel: '' },
-        { label: '25km', km: 25, gel: '' },
-        { label: '30km', km: 30, gel: '⚡ 에너지젤 #3 (벽 방어)' },
-        { label: '35km', km: 35, gel: '' },
-        { label: '40km', km: 40, gel: '' },
-        { label: 'Finish', km: 42.195, gel: '🏁 완주 목표', finish: true }
+        { label: '5km', km: 5 },
+        { label: '10km', km: 10 },
+        { label: '15km', km: 15 },
+        { label: '20km', km: 20 },
+        { label: 'Half', km: 21.0975 },
+        { label: '25km', km: 25 },
+        { label: '30km', km: 30 },
+        { label: '35km', km: 35 },
+        { label: '40km', km: 40 },
+        { label: 'Finish', km: 42.195, finish: true }
       ];
 
       splitPoints.forEach(sp => {
         const chip = document.createElement('div');
         chip.className = 'split-chip' + (sp.finish ? ' finish' : '');
-        const splitSec = (recommendedFullSec / 42.195) * sp.km;
+        const splitSec = targetPaceSecPerKm * sp.km;
         chip.innerHTML = `
           <div class="split-km">${sp.label}</div>
           <div class="split-time">${formatTime(splitSec)}</div>
-          ${sp.gel ? `<span class="split-gel">${sp.gel}</span>` : ''}
         `;
         splitsGrid.appendChild(chip);
       });
+
+      // 6. Item 4: Separate 40-Min Fueling Timing Calculation
+      const rawKmPer40Min = (40 * 60) / targetPaceSecPerKm;
+      const intervalKm = Math.max(1, Math.round(rawKmPer40Min));
+
+      document.getElementById('fuelIntervalText').textContent = `약 ${intervalKm}km 지점마다 에너지젤 섭취`;
+      document.getElementById('fuelCalcDetail').textContent =
+        `(주행 40분에 ${rawKmPer40Min.toFixed(1)}km 지점 통과 → ${intervalKm}km 단위로 보급 표기)`;
+
+      const fuelingChipsGrid = document.getElementById('fuelingChipsGrid');
+      fuelingChipsGrid.innerHTML = '';
+
+      let stepIdx = 1;
+      while (true) {
+        const markerKm = intervalKm * stepIdx;
+        // Stop if the marker is too close to the 42.195km finish line (> 39.5km)
+        if (markerKm > 39.5) break;
+        const actualMinAtMarker = Math.round((markerKm * targetPaceSecPerKm) / 60);
+        const exactKmAt40Mult = (rawKmPer40Min * stepIdx).toFixed(1);
+
+        const fChip = document.createElement('div');
+        fChip.className = 'fuel-chip';
+        fChip.innerHTML = `
+          <div class="fuel-chip-step">에너지젤 #${stepIdx} (${stepIdx * 40}분 기준)</div>
+          <div class="fuel-chip-km">${markerKm}km 지점</div>
+          <div class="fuel-chip-detail">${stepIdx * 40}분 주행 시 ${exactKmAt40Mult}km 통과 (약 ${actualMinAtMarker}분)</div>
+        `;
+        fuelingChipsGrid.appendChild(fChip);
+        stepIdx++;
+      }
     }
 
     // Initialize with Sub-3 preset on first load
