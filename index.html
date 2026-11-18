@@ -1,0 +1,1587 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>내 마라톤 예상기록 by 운동하는 팡섭</title>
+  <style>
+    :root {
+      --bg-main: #0b0f19;
+      --bg-card: #131b2e;
+      --bg-card-alt: #182238;
+      --bg-input: #0e1525;
+      --border: #26334d;
+      --border-light: #334466;
+      --text-main: #f8fafc;
+      --text-sub: #94a3b8;
+      --text-muted: #64748b;
+      --brand: #f97316;
+      --brand-light: #fb923c;
+      --brand-bg: rgba(249, 115, 22, 0.12);
+      --accent-blue: #38bdf8;
+      --accent-green: #10b981;
+      --accent-purple: #a855f7;
+      --accent-rose: #f43f5e;
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+      --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.45);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+      background: radial-gradient(circle at 15% 0%, #17233b 0%, var(--bg-main) 55%);
+      color: var(--text-main);
+      line-height: 1.5;
+      min-height: 100vh;
+      padding: 24px 16px 60px;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding-bottom: 20px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .title-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .site-title {
+      font-size: 1.75rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+      color: #ffffff;
+      font-size: 0.85rem;
+      font-weight: 700;
+      box-shadow: 0 4px 12px rgba(249, 115, 22, 0.35);
+    }
+
+    .preset-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .preset-btn {
+      background: var(--bg-card-alt);
+      color: var(--text-main);
+      border: 1px solid var(--border-light);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .preset-btn:hover {
+      border-color: var(--brand);
+      background: var(--brand-bg);
+      color: var(--brand-light);
+    }
+
+    .preset-btn.reset {
+      color: var(--text-sub);
+    }
+
+    /* Main 2-Column Layout */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 410px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    @media (max-width: 1024px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Cards */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .section-step {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .step-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .step-badge {
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 6px;
+      background: var(--brand-bg);
+      color: var(--brand-light);
+      border: 1px solid rgba(249, 115, 22, 0.3);
+    }
+
+    .step-sub {
+      font-size: 0.76rem;
+      color: var(--text-sub);
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 20px 0;
+    }
+
+    /* Option Buttons (Mileage & LSD) */
+    .option-grid-5 {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+    }
+
+    .option-grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    @media (max-width: 480px) {
+      .option-grid-5 {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .option-grid-4 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .opt-btn {
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      color: var(--text-sub);
+      padding: 10px 6px;
+      border-radius: var(--radius-sm);
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+
+    .opt-btn:hover {
+      border-color: var(--border-light);
+      color: var(--text-main);
+    }
+
+    .opt-btn.active {
+      background: var(--brand-bg);
+      border-color: var(--brand);
+      color: #ffffff;
+      font-weight: 700;
+      box-shadow: inset 0 0 0 1px var(--brand);
+    }
+
+    .opt-btn .opt-sub {
+      display: block;
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+      font-weight: 500;
+    }
+
+    .opt-btn.active .opt-sub {
+      color: var(--brand-light);
+    }
+
+    /* Record Inputs */
+    .record-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .record-row {
+      display: grid;
+      grid-template-columns: 78px 1fr auto;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+      border-radius: var(--radius-md);
+      transition: border-color 0.15s ease;
+    }
+
+    .record-row:focus-within {
+      border-color: var(--brand);
+    }
+
+    .record-row.disabled {
+      opacity: 0.48;
+      background: rgba(14, 21, 37, 0.5);
+    }
+
+    .record-label {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .record-label small {
+      display: block;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .input-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .time-input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      color: var(--text-main);
+      font-size: 1.02rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      outline: none;
+    }
+
+    .time-input::placeholder {
+      color: #3b4b6b;
+      font-weight: 500;
+    }
+
+    .live-pace {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--accent-blue);
+      background: rgba(56, 189, 248, 0.1);
+      padding: 3px 7px;
+      border-radius: 6px;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .none-check-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.76rem;
+      color: var(--text-sub);
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .none-check-label input {
+      accent-color: var(--brand);
+      width: 15px;
+      height: 15px;
+      cursor: pointer;
+    }
+
+    /* Big Calculate Button */
+    .calc-btn {
+      width: 100%;
+      margin-top: 20px;
+      padding: 16px;
+      border: none;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+      color: #ffffff;
+      font-size: 1.05rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 8px 20px -4px rgba(249, 115, 22, 0.5);
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .calc-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 24px -4px rgba(249, 115, 22, 0.65);
+    }
+
+    .calc-btn:active {
+      transform: translateY(0);
+    }
+
+    /* Right Column Stack */
+    .results-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* 1. Runner Tendency & Fatigue Factor Card */
+    .tendency-card {
+      background: linear-gradient(145deg, #162038 0%, #121a2d 100%);
+      border: 1px solid var(--border-light);
+    }
+
+    .tendency-top {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .tendency-Summary {
+      font-size: 1.08rem;
+      font-weight: 800;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .type-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 11px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--accent-blue);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+    }
+
+    .fatigue-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+    }
+
+    .fatigue-val {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--brand-light);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Gauge Bar */
+    .gauge-wrap {
+      margin-top: 8px;
+    }
+
+    .gauge-track {
+      position: relative;
+      height: 10px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #10b981 0%, #38bdf8 50%, #f97316 100%);
+      margin: 10px 0 6px;
+    }
+
+    .gauge-marker {
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 3px solid var(--bg-main);
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+      transition: left 0.3s ease;
+    }
+
+    .gauge-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.73rem;
+      color: var(--text-sub);
+    }
+
+    /* 2. VO2max & Training Pace Card */
+    .vo2-grid {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    @media (max-width: 720px) {
+      .vo2-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .vo2-score-box {
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .vo2-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-sub);
+      margin-bottom: 4px;
+    }
+
+    .vo2-number {
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: var(--accent-blue);
+      line-height: 1.1;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .vo2-unit {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .train-paces-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    @media (max-width: 600px) {
+      .train-paces-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .pace-item {
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+    }
+
+    .pace-item-title {
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: var(--text-sub);
+      margin-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .pace-item-main {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--text-main);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .pace-item-sub {
+      font-size: 0.73rem;
+      color: var(--text-muted);
+      margin-top: 3px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* 3. Hero Card: 운동하는 팡섭 추천 풀코스 목표 */
+    .hero-card {
+      background: linear-gradient(135deg, #1d2846 0%, #121a2e 100%);
+      border: 2px solid var(--brand);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-header {
+      margin-bottom: 16px;
+    }
+
+    .hero-title {
+      font-size: 1.45rem;
+      font-weight: 900;
+      color: #ffffff;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hero-subtitle {
+      font-size: 0.84rem;
+      color: var(--text-sub);
+      margin-top: 4px;
+    }
+
+    .hero-main-display {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr 1fr;
+      gap: 14px;
+      background: rgba(11, 15, 25, 0.65);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+      margin-bottom: 16px;
+      align-items: center;
+    }
+
+    @media (max-width: 640px) {
+      .hero-main-display {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+    }
+
+    .hero-stat-label {
+      font-size: 0.78rem;
+      color: var(--text-sub);
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .hero-time-big {
+      font-size: 2.65rem;
+      font-weight: 900;
+      color: var(--brand-light);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .hero-stat-val {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: #ffffff;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .hero-stat-sub {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Sub-goals (PB vs Safe) */
+    .sub-goals-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    @media (max-width: 640px) {
+      .sub-goals-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .sub-goal-card {
+      background: rgba(14, 21, 37, 0.8);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 15px 18px;
+    }
+
+    .sub-goal-card.pb {
+      border-left: 4px solid var(--accent-rose);
+    }
+
+    .sub-goal-card.safe {
+      border-left: 4px solid var(--accent-green);
+    }
+
+    .sub-goal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .sub-goal-name {
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .sub-goal-tag {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.07);
+      color: var(--text-sub);
+    }
+
+    .sub-goal-time {
+      font-size: 1.65rem;
+      font-weight: 900;
+      color: #ffffff;
+      font-variant-numeric: tabular-nums;
+      margin-bottom: 6px;
+    }
+
+    .sub-goal-card.pb .sub-goal-time {
+      color: #fda4af;
+    }
+
+    .sub-goal-card.safe .sub-goal-time {
+      color: #6ee7b7;
+    }
+
+    .sub-goal-meta {
+      display: flex;
+      gap: 14px;
+      font-size: 0.78rem;
+      color: var(--text-sub);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* 4. Riegel vs Cameron Formula Comparison Tables */
+    .formula-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    @media (max-width: 768px) {
+      .formula-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .formula-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+    }
+
+    .formula-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .formula-title {
+      font-size: 1.02rem;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .formula-desc {
+      font-size: 0.74rem;
+      color: var(--text-sub);
+      margin-top: 2px;
+    }
+
+    .formula-badge {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: var(--bg-card-alt);
+      color: var(--accent-blue);
+      border: 1px solid var(--border-light);
+      white-space: nowrap;
+    }
+
+    table.pred-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-variant-numeric: tabular-nums;
+    }
+
+    table.pred-table th {
+      text-align: left;
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      font-weight: 700;
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    table.pred-table td {
+      padding: 10px 10px;
+      font-size: 0.88rem;
+      border-bottom: 1px solid rgba(38, 51, 77, 0.5);
+    }
+
+    table.pred-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    table.pred-table tr.highlight-row {
+      background: rgba(249, 115, 22, 0.09);
+    }
+
+    table.pred-table tr.highlight-row td {
+      font-weight: 800;
+      color: var(--brand-light);
+    }
+
+    .td-dist {
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .td-time {
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .td-pace {
+      color: var(--text-sub);
+      text-align: right;
+      font-size: 0.82rem;
+    }
+
+    /* 5. 5km Split Table */
+    .splits-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    @media (max-width: 768px) {
+      .splits-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .split-chip {
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px;
+      text-align: center;
+    }
+
+    .split-chip.finish {
+      border-color: var(--brand);
+      background: var(--brand-bg);
+    }
+
+    .split-km {
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--text-sub);
+    }
+
+    .split-time {
+      font-size: 1rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin-top: 2px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .split-gel {
+      display: inline-block;
+      margin-top: 3px;
+      font-size: 0.66rem;
+      font-weight: 700;
+      color: var(--brand-light);
+    }
+
+    .error-banner {
+      display: none;
+      background: rgba(244, 63, 94, 0.15);
+      border: 1px solid var(--accent-rose);
+      color: #fda4af;
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="title-wrap">
+        <h1 class="site-title">내 마라톤 예상기록</h1>
+        <span class="brand-badge">by 운동하는 팡섭</span>
+      </div>
+      <div class="preset-group">
+        <button type="button" class="preset-btn" onclick="applyPreset('sub3')">🔥 Sub-3 샘플</button>
+        <button type="button" class="preset-btn" onclick="applyPreset('sub4')">🏃 Sub-4 샘플</button>
+        <button type="button" class="preset-btn" onclick="applyPreset('sub5')">🌱 Sub-5 샘플</button>
+        <button type="button" class="preset-btn reset" onclick="applyPreset('reset')">초기화</button>
+      </div>
+    </header>
+
+    <div id="errorBanner" class="error-banner">
+      최소 1개 이상의 종목 기록을 올바른 형식(예: 19:00 또는 1:27:24)으로 입력해 주세요.
+    </div>
+
+    <div class="dashboard-grid">
+      <!-- Left Column: Input Controls -->
+      <aside class="card">
+        <!-- STEP 1: Monthly Mileage -->
+        <div class="section-step">
+          <div class="step-title">
+            <span class="step-badge">STEP 1</span>
+            월 평균 마일리지
+          </div>
+          <span class="step-sub">최근 3개월 평균</span>
+        </div>
+        <div class="option-grid-5" id="mileageGroup">
+          <div class="opt-btn" data-val="0" onclick="selectMileage(0)">
+            100km 미만
+            <span class="opt-sub">입문/조깅</span>
+          </div>
+          <div class="opt-btn" data-val="1" onclick="selectMileage(1)">
+            100~150km
+            <span class="opt-sub">취미러너</span>
+          </div>
+          <div class="opt-btn active" data-val="2" onclick="selectMileage(2)">
+            150~200km
+            <span class="opt-sub">중급훈련</span>
+          </div>
+          <div class="opt-btn" data-val="3" onclick="selectMileage(3)">
+            200~300km
+            <span class="opt-sub">고강도</span>
+          </div>
+          <div class="opt-btn" data-val="4" onclick="selectMileage(4)">
+            300km 이상
+            <span class="opt-sub">마스터즈엘리트</span>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- STEP 2: Race Records -->
+        <div class="section-step">
+          <div class="step-title">
+            <span class="step-badge">STEP 2</span>
+            종목별 보유 기록
+          </div>
+          <span class="step-sub">분:초 또는 시:분:초</span>
+        </div>
+
+        <div class="record-list">
+          <!-- 5km -->
+          <div class="record-row" id="row-5k">
+            <div class="record-label">
+              5km 기록
+              <small>5,000m</small>
+            </div>
+            <div class="input-wrap">
+              <input type="text" id="input-5k" class="time-input" placeholder="18:12" value="18:12" oninput="onRecordInput('5k')" />
+              <span class="live-pace" id="pace-5k">3'38"/km</span>
+            </div>
+            <label class="none-check-label">
+              <input type="checkbox" id="none-5k" onchange="toggleNone('5k')" />
+              기록없음
+            </label>
+          </div>
+
+          <!-- 10km -->
+          <div class="record-row" id="row-10k">
+            <div class="record-label">
+              10km 기록
+              <small>10,000m</small>
+            </div>
+            <div class="input-wrap">
+              <input type="text" id="input-10k" class="time-input" placeholder="38:00" value="38:00" oninput="onRecordInput('10k')" />
+              <span class="live-pace" id="pace-10k">3'48"/km</span>
+            </div>
+            <label class="none-check-label">
+              <input type="checkbox" id="none-10k" onchange="toggleNone('10k')" />
+              기록없음
+            </label>
+          </div>
+
+          <!-- Half -->
+          <div class="record-row" id="row-half">
+            <div class="record-label">
+              하프 기록
+              <small>21.0975km</small>
+            </div>
+            <div class="input-wrap">
+              <input type="text" id="input-half" class="time-input" placeholder="1:24:00" value="1:24:00" oninput="onRecordInput('half')" />
+              <span class="live-pace" id="pace-half">3'59"/km</span>
+            </div>
+            <label class="none-check-label">
+              <input type="checkbox" id="none-half" onchange="toggleNone('half')" />
+              기록없음
+            </label>
+          </div>
+
+          <!-- Full -->
+          <div class="record-row disabled" id="row-full">
+            <div class="record-label">
+              풀코스 기록
+              <small>42.195km</small>
+            </div>
+            <div class="input-wrap">
+              <input type="text" id="input-full" class="time-input" placeholder="2:59:10" value="" disabled oninput="onRecordInput('full')" />
+              <span class="live-pace" id="pace-full">-</span>
+            </div>
+            <label class="none-check-label">
+              <input type="checkbox" id="none-full" checked onchange="toggleNone('full')" />
+              기록없음
+            </label>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- STEP 3: 30km+ LSD Experience -->
+        <div class="section-step">
+          <div class="step-title">
+            <span class="step-badge">STEP 3</span>
+            1년 이내의 30km 이상의 LSD 경험
+          </div>
+        </div>
+        <div class="option-grid-4" id="lsdGroup">
+          <div class="opt-btn" data-val="0" onclick="selectLsd(0)">
+            없음
+            <span class="opt-sub">0회</span>
+          </div>
+          <div class="opt-btn" data-val="1" onclick="selectLsd(1)">
+            1~3회
+            <span class="opt-sub">기본적응</span>
+          </div>
+          <div class="opt-btn active" data-val="2" onclick="selectLsd(2)">
+            5~10회
+            <span class="opt-sub">충분한지구력</span>
+          </div>
+          <div class="opt-btn" data-val="3" onclick="selectLsd(3)">
+            10회이상
+            <span class="opt-sub">벽극복완성</span>
+          </div>
+        </div>
+
+        <button type="button" class="calc-btn" onclick="calculateAll()">
+          ⚡ 예상 기록 산출하기 (입력기록 종합)
+        </button>
+      </aside>
+
+      <!-- Right Column: Analysis Dashboard -->
+      <main class="results-stack">
+        <!-- 1. Tendency & Fatigue Factor -->
+        <section class="card tendency-card">
+          <div class="tendency-top">
+            <div class="tendency-Summary">
+              <span class="type-pill" id="runnerTypePill">밸런스 올라운더형</span>
+              <span id="runnerOneLine">단거리 스피드와 장거리 지구력이 균형 있게 발달한 올라운더 러너입니다.</span>
+            </div>
+            <div class="fatigue-box">
+              <span>개인 인내계수</span>
+              <span class="fatigue-val" id="fatigueVal">1.060</span>
+            </div>
+          </div>
+          <div class="gauge-wrap">
+            <div class="gauge-track">
+              <div class="gauge-marker" id="gaugeMarker" style="left: 50%;"></div>
+            </div>
+            <div class="gauge-labels">
+              <span>장거리 마라토너형 (≤1.048)</span>
+              <span>표준 밸런스 (1.060)</span>
+              <span>스피드 레이서형 (≥1.072)</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. Expected VO2max & Training Paces -->
+        <section class="card">
+          <div class="section-step" style="margin-bottom: 14px;">
+            <div class="step-title">예상 VO2max (VDOT) 및 핵심 훈련 페이스</div>
+            <span class="step-sub">Jack Daniels 생리학 모델 기반 (400m 트랙 랩타임 병기)</span>
+          </div>
+          <div class="vo2-grid">
+            <div class="vo2-score-box">
+              <span class="vo2-label">예상 VO2max</span>
+              <div class="vo2-number" id="vo2Val">56.2</div>
+              <span class="vo2-unit">mL / kg / min</span>
+            </div>
+            <div class="train-paces-grid">
+              <div class="pace-item">
+                <div class="pace-item-title">
+                  <span>VO2max 인터벌 (I)</span>
+                  <span style="color: var(--accent-rose);">심폐강화</span>
+                </div>
+                <div class="pace-item-main" id="paceVo2">3'35"/km</div>
+                <div class="pace-item-sub" id="trackVo2">400m 트랙: 86초</div>
+              </div>
+              <div class="pace-item">
+                <div class="pace-item-title">
+                  <span>LT 지속주/역치 (T)</span>
+                  <span style="color: var(--brand-light);">젖산역치</span>
+                </div>
+                <div class="pace-item-main" id="paceLt">3'55"/km</div>
+                <div class="pace-item-sub" id="trackLt">400m 트랙: 94초</div>
+              </div>
+              <div class="pace-item">
+                <div class="pace-item-title">
+                  <span>이지런/조깅 (E)</span>
+                  <span style="color: var(--accent-green);">유산소기초</span>
+                </div>
+                <div class="pace-item-main" id="paceEasy">4'42"~5'08"</div>
+                <div class="pace-item-sub">회복 및 LSD 권장 페이스</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. Hero Card: 운동하는 팡섭 추천 풀코스 목표 -->
+        <section class="card hero-card">
+          <div class="hero-header">
+            <h2 class="hero-title">🏆 운동하는 팡섭 추천 풀코스 목표</h2>
+            <p class="hero-subtitle">입력 기록(Riegel·Cameron 종합)과 월간 마일리지, 30km+ LSD 훈련량을 결합한 실전 맞춤형 풀코스 타겟입니다.</p>
+          </div>
+
+          <div class="hero-main-display">
+            <div>
+              <div class="hero-stat-label">추천 표준 완주 목표</div>
+              <div class="hero-time-big" id="heroTargetTime">2:59:10</div>
+            </div>
+            <div>
+              <div class="hero-stat-label">목표 평균 페이스</div>
+              <div class="hero-stat-val" id="heroTargetPace">4'15"/km</div>
+              <div class="hero-stat-sub" id="heroHalfSplit">하프 통과: 1:29:35</div>
+            </div>
+            <div>
+              <div class="hero-stat-label">5km 구간당 스플릿</div>
+              <div class="hero-stat-val" id="hero5kSplit">21분 14초</div>
+              <div class="hero-stat-sub">초반 오버페이스 주의 구간</div>
+            </div>
+          </div>
+
+          <div class="sub-goals-grid">
+            <div class="sub-goal-card pb">
+              <div class="sub-goal-head">
+                <span class="sub-goal-name">🔥 공격적인 PB 목표</span>
+                <span class="sub-goal-tag">최상 컨디션 · 패기 운영</span>
+              </div>
+              <div class="sub-goal-time" id="pbTargetTime">2:57:05</div>
+              <div class="sub-goal-meta">
+                <span id="pbTargetPace">페이스: 4'12"/km</span>
+                <span id="pbTargetSplit">5km당: 20분 59초</span>
+              </div>
+            </div>
+
+            <div class="sub-goal-card safe">
+              <div class="sub-goal-head">
+                <span class="sub-goal-name">🛡️ 안전한 완주 목표</span>
+                <span class="sub-goal-tag">30km 벽 방어 · 안정 운영</span>
+              </div>
+              <div class="sub-goal-time" id="safeTargetTime">3:03:20</div>
+              <div class="sub-goal-meta">
+                <span id="safeTargetPace">페이스: 4'21"/km</span>
+                <span id="safeTargetSplit">5km당: 21분 43초</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4. Formula Comparison: Riegel vs Cameron -->
+        <div class="formula-grid">
+          <!-- Riegel -->
+          <section class="formula-box">
+            <div class="formula-head">
+              <div>
+                <h3 class="formula-title">Riegel 공식 코스별 예상기록</h3>
+                <p class="formula-desc">T₂ = T₁ × (D₂ / D₁)^1.06 · 단·중거리 비례 표준</p>
+              </div>
+              <span class="formula-badge">Riegel (1981)</span>
+            </div>
+            <table class="pred-table">
+              <thead>
+                <tr>
+                  <th>종목</th>
+                  <th>예상 기록</th>
+                  <th style="text-align: right;">km당 페이스</th>
+                </tr>
+              </thead>
+              <tbody id="riegelTableBody"></tbody>
+            </table>
+          </section>
+
+          <!-- Cameron -->
+          <section class="formula-box">
+            <div class="formula-head">
+              <div>
+                <h3 class="formula-title">Cameron 공식 코스별 예상기록</h3>
+                <p class="formula-desc">거리별 비선형 감속 모델 · 장거리 보수적 예측</p>
+              </div>
+              <span class="formula-badge">Cameron (1998)</span>
+            </div>
+            <table class="pred-table">
+              <thead>
+                <tr>
+                  <th>종목</th>
+                  <th>예상 기록</th>
+                  <th style="text-align: right;">km당 페이스</th>
+                </tr>
+              </thead>
+              <tbody id="cameronTableBody"></tbody>
+            </table>
+          </section>
+        </div>
+
+        <!-- 5. Full Course 5km Split Guide -->
+        <section class="card">
+          <div class="section-step">
+            <div class="step-title">풀코스 5km 구간별 통과 시간표 & 보급 타이밍 (추천 목표 기준)</div>
+            <span class="step-sub">글리코겐 고갈 방지를 위해 15km 이전부터 선제적 에너지젤 섭취 권장</span>
+          </div>
+          <div class="splits-grid" id="splitsGrid"></div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    let currentMileage = 3; // default for Sub-3 preset initialized on load
+    let currentLsd = 2;
+
+    const DISTANCES = {
+      '5k': 5.0,
+      '10k': 10.0,
+      'half': 21.0975,
+      'full': 42.195
+    };
+
+    const TARGET_COURSES = [
+      { name: '5km', km: 5.0 },
+      { name: '10km', km: 10.0 },
+      { name: '15km', km: 15.0 },
+      { name: '하프마라톤', km: 21.0975 },
+      { name: '30km', km: 30.0 },
+      { name: '풀마라톤', km: 42.195, highlight: true }
+    ];
+
+    function parseTimeStr(str) {
+      if (!str) return null;
+      const cleaned = str.trim().replace(/\s+/g, ':');
+      const parts = cleaned.split(':').map(Number);
+      if (parts.some(isNaN)) return null;
+      if (parts.length === 2) {
+        const [m, s] = parts;
+        if (m < 0 || s < 0 || s >= 60) return null;
+        return m * 60 + s;
+      } else if (parts.length === 3) {
+        const [h, m, s] = parts;
+        if (h < 0 || m < 0 || m >= 60 || s < 0 || s >= 60) return null;
+        return h * 3600 + m * 60 + s;
+      }
+      return null;
+    }
+
+    function formatTime(sec) {
+      const total = Math.max(0, Math.round(sec));
+      const h = Math.floor(total / 3600);
+      const m = Math.floor((total % 3600) / 60);
+      const s = total % 60;
+      if (h > 0) {
+        return `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+      }
+      return `${m}:${String(s).padStart(2, '0')}`;
+    }
+
+    function formatPace(secPerKm) {
+      const total = Math.max(0, Math.round(secPerKm));
+      const m = Math.floor(total / 60);
+      const s = total % 60;
+      return `${m}'${String(s).padStart(2, '0')}"/km`;
+    }
+
+    function formatKoreanMinSec(sec) {
+      const total = Math.max(0, Math.round(sec));
+      const m = Math.floor(total / 60);
+      const s = total % 60;
+      return `${m}분 ${String(s).padStart(2, '0')}초`;
+    }
+
+    function riegelPredict(t1, d1, d2) {
+      return t1 * Math.pow(d2 / d1, 1.06);
+    }
+
+    function cameronPredict(t1, d1Km, d2Km) {
+      const d1 = d1Km / 1.609344;
+      const d2 = d2Km / 1.609344;
+      const f1 = 13.49681 - 0.048865 * d1 + 2.438936 / Math.pow(d1, 0.7905);
+      const f2 = 13.49681 - 0.048865 * d2 + 2.438936 / Math.pow(d2, 0.7905);
+      return (t1 / d1) * d2 * (f1 / f2);
+    }
+
+    function calcVDOT(distKm, timeSec) {
+      const distM = distKm * 1000;
+      const tMin = timeSec / 60;
+      const v = distM / tMin;
+      const vo2 = -4.60 + 0.182258 * v + 0.000104 * v * v;
+      const pct = 0.8 + 0.1894393 * Math.exp(-0.012778 * tMin) + 0.2989558 * Math.exp(-0.1932605 * tMin);
+      return vo2 / pct;
+    }
+
+    function velocityFromVO2(targetVo2) {
+      const a = 0.000104;
+      const b = 0.182258;
+      const c = -4.60 - targetVo2;
+      return (-b + Math.sqrt(b * b - 4 * a * c)) / (2 * a);
+    }
+
+    function selectMileage(val) {
+      currentMileage = val;
+      document.querySelectorAll('#mileageGroup .opt-btn').forEach(btn => {
+        btn.classList.toggle('active', Number(btn.dataset.val) === val);
+      });
+      calculateAll();
+    }
+
+    function selectLsd(val) {
+      currentLsd = val;
+      document.querySelectorAll('#lsdGroup .opt-btn').forEach(btn => {
+        btn.classList.toggle('active', Number(btn.dataset.val) === val);
+      });
+      calculateAll();
+    }
+
+    function toggleNone(key) {
+      const checkbox = document.getElementById(`none-${key}`);
+      const input = document.getElementById(`input-${key}`);
+      const row = document.getElementById(`row-${key}`);
+      const paceEl = document.getElementById(`pace-${key}`);
+
+      if (checkbox.checked) {
+        input.value = '';
+        input.disabled = true;
+        row.classList.add('disabled');
+        paceEl.textContent = '-';
+      } else {
+        input.disabled = false;
+        row.classList.remove('disabled');
+        input.focus();
+      }
+      calculateAll();
+    }
+
+    function onRecordInput(key) {
+      const input = document.getElementById(`input-${key}`);
+      const paceEl = document.getElementById(`pace-${key}`);
+      const sec = parseTimeStr(input.value);
+      if (sec && sec > 0) {
+        paceEl.textContent = formatPace(sec / DISTANCES[key]);
+      } else {
+        paceEl.textContent = '-';
+      }
+      calculateAll();
+    }
+
+    function applyPreset(type) {
+      const presets = {
+        sub3: {
+          mileage: 3,
+          lsd: 2,
+          records: { '5k': '18:12', '10k': '38:00', 'half': '1:24:00', 'full': '' }
+        },
+        sub4: {
+          mileage: 1,
+          lsd: 1,
+          records: { '5k': '23:45', '10k': '49:30', 'half': '1:49:15', 'full': '' }
+        },
+        sub5: {
+          mileage: 0,
+          lsd: 0,
+          records: { '5k': '28:55', '10k': '1:00:20', 'half': '2:13:15', 'full': '' }
+        },
+        reset: {
+          mileage: 2,
+          lsd: 1,
+          records: { '5k': '', '10k': '45:00', 'half': '', 'full': '' }
+        }
+      };
+
+      const p = presets[type];
+      if (!p) return;
+
+      currentMileage = p.mileage;
+      currentLsd = p.lsd;
+
+      document.querySelectorAll('#mileageGroup .opt-btn').forEach(btn => {
+        btn.classList.toggle('active', Number(btn.dataset.val) === currentMileage);
+      });
+      document.querySelectorAll('#lsdGroup .opt-btn').forEach(btn => {
+        btn.classList.toggle('active', Number(btn.dataset.val) === currentLsd);
+      });
+
+      ['5k', '10k', 'half', 'full'].forEach(k => {
+        const val = p.records[k];
+        const input = document.getElementById(`input-${k}`);
+        const check = document.getElementById(`none-${k}`);
+        const row = document.getElementById(`row-${k}`);
+        const paceEl = document.getElementById(`pace-${k}`);
+
+        if (val) {
+          check.checked = false;
+          input.disabled = false;
+          input.value = val;
+          row.classList.remove('disabled');
+          const sec = parseTimeStr(val);
+          paceEl.textContent = sec ? formatPace(sec / DISTANCES[k]) : '-';
+        } else {
+          check.checked = true;
+          input.disabled = true;
+          input.value = '';
+          row.classList.add('disabled');
+          paceEl.textContent = '-';
+        }
+      });
+
+      calculateAll();
+    }
+
+    function calculateAll() {
+      const validRecords = [];
+      ['5k', '10k', 'half', 'full'].forEach(k => {
+        const check = document.getElementById(`none-${k}`);
+        const input = document.getElementById(`input-${k}`);
+        if (!check.checked) {
+          const sec = parseTimeStr(input.value);
+          if (sec && sec > 0) {
+            validRecords.push({ key: k, km: DISTANCES[k], sec });
+          }
+        }
+      });
+
+      const banner = document.getElementById('errorBanner');
+      if (validRecords.length === 0) {
+        banner.style.display = 'block';
+        return;
+      }
+      banner.style.display = 'none';
+
+      // 1. Personal Fatigue Factor (인내계수)
+      let bFactor = 1.060;
+      if (validRecords.length >= 2) {
+        const n = validRecords.length;
+        let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
+        validRecords.forEach(r => {
+          const x = Math.log(r.km);
+          const y = Math.log(r.sec);
+          sumX += x;
+          sumY += y;
+          sumXY += x * y;
+          sumXX += x * x;
+        });
+        bFactor = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+        bFactor = Math.max(1.025, Math.min(1.115, bFactor));
+      } else {
+        const trainAdj = (2 - currentMileage) * 0.0035 + (1.5 - currentLsd) * 0.003;
+        bFactor = 1.060 + trainAdj;
+      }
+
+      document.getElementById('fatigueVal').textContent = bFactor.toFixed(3);
+      const pctGauge = Math.max(5, Math.min(95, ((bFactor - 1.040) / (1.080 - 1.040)) * 100));
+      document.getElementById('gaugeMarker').style.left = `${pctGauge}%`;
+
+      const pill = document.getElementById('runnerTypePill');
+      const oneLine = document.getElementById('runnerOneLine');
+      if (bFactor <= 1.052) {
+        pill.textContent = '장거리 마라토너형';
+        pill.style.background = 'rgba(16, 185, 129, 0.15)';
+        pill.style.color = '#34d399';
+        pill.style.borderColor = 'rgba(16, 185, 129, 0.35)';
+        oneLine.textContent = '거리가 늘어날수록 페이스 유지력이 뛰어난 지구력 특화 마라토너 성향입니다.';
+      } else if (bFactor >= 1.068) {
+        pill.textContent = '스피드 레이서형';
+        pill.style.background = 'rgba(249, 115, 22, 0.15)';
+        pill.style.color = '#fb923c';
+        pill.style.borderColor = 'rgba(249, 115, 22, 0.35)';
+        oneLine.textContent = '5K·10K 스피드가 뛰어나며, 마일리지와 LSD를 보강하면 풀코스 기록 단축 폭이 매우 큽니다.';
+      } else {
+        pill.textContent = '밸런스 올라운더형';
+        pill.style.background = 'rgba(56, 189, 248, 0.15)';
+        pill.style.color = '#38bdf8';
+        pill.style.borderColor = 'rgba(56, 189, 248, 0.35)';
+        oneLine.textContent = '단거리 스피드와 장거리 지구력이 균형 있게 발달한 표준 올라운더 러너입니다.';
+      }
+
+      // 2. VO2max (VDOT) & Training Paces
+      const vdots = validRecords.map(r => calcVDOT(r.km, r.sec));
+      const avgVdot = vdots.reduce((a, b) => a + b, 0) / vdots.length;
+      document.getElementById('vo2Val').textContent = avgVdot.toFixed(1);
+
+      const vVo2 = velocityFromVO2(avgVdot * 0.98);
+      const vLt = velocityFromVO2(avgVdot * 0.88);
+      const vEasyFast = velocityFromVO2(avgVdot * 0.73);
+      const vEasySlow = velocityFromVO2(avgVdot * 0.65);
+
+      const secPerKmVo2 = (1000 / vVo2) * 60;
+      const secPerKmLt = (1000 / vLt) * 60;
+      const secPerKmEasyFast = (1000 / vEasyFast) * 60;
+      const secPerKmEasySlow = (1000 / vEasySlow) * 60;
+
+      document.getElementById('paceVo2').textContent = formatPace(secPerKmVo2);
+      document.getElementById('trackVo2').textContent = `400m 트랙: ${Math.round(secPerKmVo2 * 0.4)}초`;
+      document.getElementById('paceLt').textContent = formatPace(secPerKmLt);
+      document.getElementById('trackLt').textContent = `400m 트랙: ${Math.round(secPerKmLt * 0.4)}초`;
+      document.getElementById('paceEasy').textContent = `${formatPace(secPerKmEasyFast).replace('/km', '')}~${formatPace(secPerKmEasySlow)}`;
+
+      // 3. Riegel & Cameron Predictions per Course
+      const riegelBody = document.getElementById('riegelTableBody');
+      const cameronBody = document.getElementById('cameronTableBody');
+      riegelBody.innerHTML = '';
+      cameronBody.innerHTML = '';
+
+      let fullRiegelSec = 0;
+      let fullCameronSec = 0;
+
+      TARGET_COURSES.forEach(course => {
+        const rPreds = validRecords.map(r => riegelPredict(r.sec, r.km, course.km));
+        const cPreds = validRecords.map(r => cameronPredict(r.sec, r.km, course.km));
+        const rAvg = rPreds.reduce((a, b) => a + b, 0) / rPreds.length;
+        const cAvg = cPreds.reduce((a, b) => a + b, 0) / cPreds.length;
+
+        if (course.highlight) {
+          fullRiegelSec = rAvg;
+          fullCameronSec = cAvg;
+        }
+
+        const rRow = document.createElement('tr');
+        if (course.highlight) rRow.className = 'highlight-row';
+        rRow.innerHTML = `
+          <td class="td-dist">${course.name}</td>
+          <td class="td-time">${formatTime(rAvg)}</td>
+          <td class="td-pace">${formatPace(rAvg / course.km)}</td>
+        `;
+        riegelBody.appendChild(rRow);
+
+        const cRow = document.createElement('tr');
+        if (course.highlight) cRow.className = 'highlight-row';
+        cRow.innerHTML = `
+          <td class="td-dist">${course.name}</td>
+          <td class="td-time">${formatTime(cAvg)}</td>
+          <td class="td-pace">${formatPace(cAvg / course.km)}</td>
+        `;
+        cameronBody.appendChild(cRow);
+      });
+
+      // 4. 운동하는 팡섭 추천 풀코스 목표 (Balanced Midpoint + Mileage/LSD Adjustment)
+      const midFullSec = (fullRiegelSec + fullCameronSec) / 2;
+      const basePenalty = 0.0034;
+      const mileagePenalties = [0.04118, 0.02535, 0.0160, 0.00702, 0.0];
+      const lsdPenalties = [0.0250, 0.0140, 0.0050, -0.0034];
+      const maxInputDist = Math.max(...validRecords.map(r => r.km));
+      const shortOnlyPenalty = maxInputDist < 20 ? 0.02345 : 0.0;
+
+      const totalPenalty = basePenalty + mileagePenalties[currentMileage] + lsdPenalties[currentLsd] + shortOnlyPenalty;
+      const recommendedFullSec = midFullSec * (1 + totalPenalty);
+      const pbFullSec = recommendedFullSec * 0.9885;
+      const safeFullSec = recommendedFullSec * 1.0235;
+
+      document.getElementById('heroTargetTime').textContent = formatTime(recommendedFullSec);
+      document.getElementById('heroTargetPace').textContent = formatPace(recommendedFullSec / 42.195);
+      document.getElementById('heroHalfSplit').textContent = `하프 통과: ${formatTime(recommendedFullSec * 0.5)}`;
+      document.getElementById('hero5kSplit').textContent = formatKoreanMinSec((recommendedFullSec / 42.195) * 5);
+
+      document.getElementById('pbTargetTime').textContent = formatTime(pbFullSec);
+      document.getElementById('pbTargetPace').textContent = `페이스: ${formatPace(pbFullSec / 42.195)}`;
+      document.getElementById('pbTargetSplit').textContent = `5km당: ${formatKoreanMinSec((pbFullSec / 42.195) * 5)}`;
+
+      document.getElementById('safeTargetTime').textContent = formatTime(safeFullSec);
+      document.getElementById('safeTargetPace').textContent = `페이스: ${formatPace(safeFullSec / 42.195)}`;
+      document.getElementById('safeTargetSplit').textContent = `5km당: ${formatKoreanMinSec((safeFullSec / 42.195) * 5)}`;
+
+      // 5. 5km Splits Chart
+      const splitsGrid = document.getElementById('splitsGrid');
+      splitsGrid.innerHTML = '';
+      const splitPoints = [
+        { label: '5km', km: 5, gel: '' },
+        { label: '10km', km: 10, gel: '⚡ 에너지젤 #1' },
+        { label: '15km', km: 15, gel: '' },
+        { label: '20km', km: 20, gel: '⚡ 에너지젤 #2' },
+        { label: 'Half', km: 21.0975, gel: '' },
+        { label: '25km', km: 25, gel: '' },
+        { label: '30km', km: 30, gel: '⚡ 에너지젤 #3 (벽 방어)' },
+        { label: '35km', km: 35, gel: '' },
+        { label: '40km', km: 40, gel: '' },
+        { label: 'Finish', km: 42.195, gel: '🏁 완주 목표', finish: true }
+      ];
+
+      splitPoints.forEach(sp => {
+        const chip = document.createElement('div');
+        chip.className = 'split-chip' + (sp.finish ? ' finish' : '');
+        const splitSec = (recommendedFullSec / 42.195) * sp.km;
+        chip.innerHTML = `
+          <div class="split-km">${sp.label}</div>
+          <div class="split-time">${formatTime(splitSec)}</div>
+          ${sp.gel ? `<span class="split-gel">${sp.gel}</span>` : ''}
+        `;
+        splitsGrid.appendChild(chip);
+      });
+    }
+
+    // Initialize with Sub-3 preset on first load
+    window.addEventListener('DOMContentLoaded', () => {
+      applyPreset('sub3');
+    });
+  </script>
+</body>
+</html>
